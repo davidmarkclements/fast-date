@@ -42,6 +42,15 @@
   },
   "dependencies": {},
   "directories": {
+    "example": "examples",
     "test": "test"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidmarkclements/fast-date.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davidmarkclements/fast-date/issues"
+  },
+  "homepage": "https://github.com/davidmarkclements/fast-date#readme"
 }
