@@ -1,6 +1,8 @@
 # fast-date
 
 [![Build Status](https://travis-ci.org/davidmarkclements/fast-date.svg?branch=master)](https://travis-ci.org/davidmarkclements/fast-date)
+[![codecov](https://codecov.io/gh/davidmarkclements/fast-date/branch/master/graph/badge.svg)](https://codecov.io/gh/davidmarkclements/fast-date)
+
 
 High Speed UTC Timestamps 
 

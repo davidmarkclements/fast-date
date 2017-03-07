@@ -6,10 +6,11 @@
   "scripts": {
     "test": "tap -R spec --no-cov 'test/*.js'",
     "cov": "tap --100 'test/*.js'",
+    "cov-badge": "tap --coverage-report=lcov && codecov -t 417ad444-d6e4-4fa6-b778-27d9b5317f02",
     "bench": "node bench",
     "bench-http": "node bench/http",
     "lint": "standard",
-    "ci": "npm run cov"
+    "ci": "npm run cov && npm run cov-badge"
   },
   "precommit": [
     "lint",
@@ -26,6 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "autocannon": "^0.16.1",
+    "codecov": "^1.0.1",
     "fastbench": "^1.0.1",
     "pre-commit": "^1.2.2",
     "standard": "^9.0.0",
