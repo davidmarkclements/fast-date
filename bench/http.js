@@ -38,22 +38,22 @@ dateNowSrv.listen(0, function () {
   register('dateNow', dateNowSrv.address().port)
 })
 
-function register(name, port) {
+function register (name, port) {
   count += 1
-  benches[name] =  {
+  benches[name] = {
     title: name,
     url: 'http://localhost:' + port,
-    connections: 10, //default 
-    pipelining: 1, // default 
-    duration: 10 // default 
+    connections: 10, // default
+    pipelining: 1, // default
+    duration: 10 // default
   }
   if (count === 4) {
     run(benches.nativeDate, function () {
-      setTimeout(function () {      
+      setTimeout(function () {
         run(benches.fastDate, function () {
-          setTimeout(function () {      
+          setTimeout(function () {
             run(benches.dateNow, function () {
-              setTimeout(function () {      
+              setTimeout(function () {
                 run(benches.fallback, function () {
                   console.log('=========== Complete ===========')
                   process.exit(0)

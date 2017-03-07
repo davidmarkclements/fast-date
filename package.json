@@ -4,11 +4,12 @@
   "description": "Fast UTC Date Timestamps",
   "main": "index.js",
   "scripts": {
-    "test": "standard --fix && tap -R spec --no-cov 'test/*.js'",
+    "test": "tap -R spec --no-cov 'test/*.js'",
     "cov": "tap --100 'test/*.js'",
     "bench": "node bench",
     "bench-http": "node bench/http",
-    "ci": "standard && npm run cov"
+    "lint": "standard",
+    "ci": "npm run cov"
   },
   "precommit": [
     "lint",

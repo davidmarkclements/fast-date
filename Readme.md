@@ -4,6 +4,14 @@
 
 High Speed UTC Timestamps 
 
+## Supports
+
+[*] Node 0.10
+[*] Node 0.12
+[*] Node 4
+[*] Node 6
+[*] Node 7
+
 ## Benchmarks
 
 ```sh
@@ -14,57 +22,6 @@ npm run bench
 NativeDate*100000: 215.076ms
 FastDate*100000: 124.236ms
 DateNow*100000: 123.043ms
-```
-
-```sh
-npm run bench-http
-```
-
-```
-===========Benching nativeDate=============
-Running 10s test @ http://localhost:59870
-10 connections
-
-Stat         Avg     Stdev    Max
-Latency (ms) 0.02    0.21     19
-Req/Sec      18582.8 1080.63  19135
-Bytes/Sec    2.38 MB 127.8 kB 2.49 MB
-
-186k requests in 10s, 23.97 MB read
-
-===========Benching fastDate=============
-Running 10s test @ http://localhost:59871
-10 connections
-
-Stat         Avg      Stdev    Max
-Latency (ms) 0.02     0.12     7
-Req/Sec      19103.28 520.99   19647
-Bytes/Sec    2.47 MB  84.26 kB 2.62 MB
-
-210k requests in 11s, 27.11 MB read
-
-===========Benching dateNow=============
-Running 10s test @ http://localhost:59873
-10 connections
-
-Stat         Avg     Stdev  Max
-Latency (ms) 0.01    0.11   10
-Req/Sec      19269.1 313.15 19631
-Bytes/Sec    2.16 MB 0 B    2.23 MB
-
-212k requests in 11s, 23.95 MB read
-
-===========Benching fallback=============
-Running 10s test @ http://localhost:59872
-10 connections
-
-Stat         Avg      Stdev    Max
-Latency (ms) 0.01     0.1      8
-Req/Sec      18989.82 250.14   19359
-Bytes/Sec    2.44 MB  37.68 kB 2.62 MB
-
-209k requests in 11s, 26.95 MB read
-=========== Complete ===========
 ```
 
 ## Usage
@@ -148,6 +105,61 @@ All files    |      100 |      100 |      100 |      100 |
  fallback.js |      100 |      100 |      100 |      100 |
  index.js    |      100 |      100 |      100 |      100 |
 -------------|----------|----------|----------|----------|
+```
+
+## More Benchmarks
+
+For effects on an HTTP server:
+
+```sh
+npm run bench-http
+```
+
+```
+===========Benching nativeDate=============
+Running 10s test @ http://localhost:59870
+10 connections
+
+Stat         Avg     Stdev    Max
+Latency (ms) 0.02    0.21     19
+Req/Sec      18582.8 1080.63  19135
+Bytes/Sec    2.38 MB 127.8 kB 2.49 MB
+
+186k requests in 10s, 23.97 MB read
+
+===========Benching fastDate=============
+Running 10s test @ http://localhost:59871
+10 connections
+
+Stat         Avg      Stdev    Max
+Latency (ms) 0.02     0.12     7
+Req/Sec      19103.28 520.99   19647
+Bytes/Sec    2.47 MB  84.26 kB 2.62 MB
+
+210k requests in 11s, 27.11 MB read
+
+===========Benching dateNow=============
+Running 10s test @ http://localhost:59873
+10 connections
+
+Stat         Avg     Stdev  Max
+Latency (ms) 0.01    0.11   10
+Req/Sec      19269.1 313.15 19631
+Bytes/Sec    2.16 MB 0 B    2.23 MB
+
+212k requests in 11s, 23.95 MB read
+
+===========Benching fallback=============
+Running 10s test @ http://localhost:59872
+10 connections
+
+Stat         Avg      Stdev    Max
+Latency (ms) 0.01     0.1      8
+Req/Sec      18989.82 250.14   19359
+Bytes/Sec    2.44 MB  37.68 kB 2.62 MB
+
+209k requests in 11s, 26.95 MB read
+=========== Complete ===========
 ```
 
 ## License

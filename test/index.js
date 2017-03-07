@@ -60,27 +60,29 @@ test('falls back to fallback even if attempt causes throw', function (t) {
   t.end()
 })
 
-test('emits warning if http is loaded before fast-date', function (t) {
-  for (var k in require.cache) delete require.cache[k]
-  process.once('warning', function (msg) {
-    t.is(msg.toString(), 'Warning: For best performance, load fast-date before requiring http(s)', 'warning emitted')
-    t.end()
+if (process.emitWarning) {
+  test('emits warning if http is loaded before fast-date', function (t) {
+    for (var k in require.cache) delete require.cache[k]
+    process.once('warning', function (msg) {
+      t.is(msg.toString(), 'Warning: For best performance, load fast-date before requiring http(s)', 'warning emitted')
+      t.end()
+    })
+    require('http')
+    require('../')
+    for (var p in require.cache) delete require.cache[p]
   })
-  require('http')
-  require('../')
-  for (var p in require.cache) delete require.cache[p]
-})
 
-test('uses module.exports.TOP_NAME in load order warning if assigned by parent', function (t) {
-  for (var k in require.cache) delete require.cache[k]
-  process.once('warning', function (msg) {
-    t.is(msg.toString(), 'Warning: For best performance, load some-parent-module before requiring http(s)', 'custom warning emitted')
-    t.end()
+  test('uses module.exports.TOP_NAME in load order warning if assigned by parent', function (t) {
+    for (var k in require.cache) delete require.cache[k]
+    process.once('warning', function (msg) {
+      t.is(msg.toString(), 'Warning: For best performance, load some-parent-module before requiring http(s)', 'custom warning emitted')
+      t.end()
+    })
+    require('http')
+    require('../').TOP_NAME = 'some-parent-module'
+    for (var p in require.cache) delete require.cache[p]
   })
-  require('http')
-  require('../').TOP_NAME = 'some-parent-module'
-  for (var p in require.cache) delete require.cache[p]
-})
+}
 
 test('warning system falls back to console.warn in absence of process.emitWarning', function (t) {
   for (var k in require.cache) delete require.cache[k]
