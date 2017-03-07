@@ -1,5 +1,7 @@
 # fast-date
 
+[![Build Status](https://travis-ci.org/davidmarkclements/fast-date.svg?branch=master)](https://travis-ci.org/davidmarkclements/fast-date)
+
 High Speed UTC Timestamps 
 
 ## Benchmarks
