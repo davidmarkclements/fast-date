@@ -62,8 +62,10 @@ test('falls back to fallback even if attempt causes throw', function (t) {
 
 test('emits warning if http is loaded before fast-date', function (t) {
   for (var k in require.cache) delete require.cache[k]
-  if (!process.emitWarning) process.emitWarning = function polyfill(msg) {
-    process.emit('warning', 'Warning: ' + msg)
+  if (!process.emitWarning) {
+    process.emitWarning = function polyfill (msg) {
+      process.emit('warning', 'Warning: ' + msg)
+    }
   }
   process.once('warning', function (msg) {
     t.is(msg.toString(), 'Warning: For best performance, load fast-date before requiring http(s)', 'warning emitted')
@@ -77,8 +79,10 @@ test('emits warning if http is loaded before fast-date', function (t) {
 
 test('uses module.exports.TOP_NAME in load order warning if assigned by parent', function (t) {
   for (var k in require.cache) delete require.cache[k]
-  if (!process.emitWarning) process.emitWarning = function polyfill(msg) {
-    process.emit('warning', 'Warning: ' + msg)
+  if (!process.emitWarning) {
+    process.emitWarning = function polyfill (msg) {
+      process.emit('warning', 'Warning: ' + msg)
+    }
   }
   process.once('warning', function (msg) {
     t.is(msg.toString(), 'Warning: For best performance, load some-parent-module before requiring http(s)', 'custom warning emitted')

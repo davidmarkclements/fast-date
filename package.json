@@ -8,6 +8,7 @@
     "cov": "tap --100 'test/*.js'",
     "cov-badge": "tap --coverage-report=lcov && codecov -t 417ad444-d6e4-4fa6-b778-27d9b5317f02",
     "bench": "node bench",
+    "prebench-http": "optional-dev-dependency -t bench-http",
     "bench-http": "node bench/http",
     "lint": "standard",
     "ci": "npm run cov && npm run cov-badge"
@@ -26,12 +27,18 @@
   "author": "David Mark Clements <huperekchuno@googlemail.com>",
   "license": "MIT",
   "devDependencies": {
-    "autocannon": "^0.16.1",
     "codecov": "^1.0.1",
     "fastbench": "^1.0.1",
+    "optional-dev-dependency": "^2.0.0",
     "pre-commit": "^1.2.2",
     "standard": "^9.0.0",
     "tap": "^10.2.2"
+  },
+  "optionalDevDependencies": {
+    "autocannon": [
+      "^0.16.1",
+      "bench-http"
+    ]
   },
   "dependencies": {},
   "directories": {
