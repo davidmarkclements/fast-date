@@ -8,11 +8,11 @@ High Speed UTC Timestamps
 
 ## Supports
 
-[*] Node 0.10
-[*] Node 0.12
-[*] Node 4
-[*] Node 6
-[*] Node 7
+- [x] Node 0.10
+- [x] Node 0.12
+- [x] Node 4
+- [x] Node 6
+- [x] Node 7
 
 ## Benchmarks
 
