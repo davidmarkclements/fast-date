@@ -1,0 +1,37 @@
+{
+  "name": "fast-date",
+  "version": "1.0.0",
+  "description": "Fast UTC Date Timestamps",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard --fix && tap -R spec --no-cov 'test/*.js'",
+    "cov": "tap --100 'test/*.js'",
+    "bench": "node bench",
+    "bench-http": "node bench/http",
+    "ci": "standard && npm run cov"
+  },
+  "precommit": [
+    "lint",
+    "test"
+  ],
+  "keywords": [
+    "date",
+    "fast",
+    "performant",
+    "performance",
+    "time"
+  ],
+  "author": "David Mark Clements <huperekchuno@googlemail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "autocannon": "^0.16.1",
+    "fastbench": "^1.0.1",
+    "pre-commit": "^1.2.2",
+    "standard": "^9.0.0",
+    "tap": "^10.2.2"
+  },
+  "dependencies": {},
+  "directories": {
+    "test": "test"
+  }
+}
