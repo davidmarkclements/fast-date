@@ -9,31 +9,33 @@ if (~process.moduleLoadList.indexOf('NativeModule http')) {
   })
 }
 
-var natives = process.binding('natives')
-var vm = require('vm')
-var httpOutgoing = {
-  exports: {},
-  require: function (path) {
-    if (path === 'internal/util') {
-      var internalUtil = {}
-      vm.runInThisContext('(function (exports) {' +
-        natives['internal/util'] +
-      '})')(internalUtil)
-      return internalUtil
-    }
-    return require(path)
-  }
-}
-
 try {
+  var natives = process.binding('natives')
+  var vm = require('vm')
+  var httpOutgoing = {
+    exports: {},
+    require: function (path) {
+      if (path === 'internal/util') {
+        var internalUtil = {}
+        vm.runInThisContext('(function (exports) {' +
+          natives['internal/util'] +
+        '})')(internalUtil)
+        return internalUtil
+      }
+      return require(path)
+    }
+  }
+
+  httpOutgoing.require.wrapped = true
+
   vm.runInThisContext(
-    '(function (exports, require, module) {' +
+    '/*fd*/(function (exports, require, module) {' +
       'if (typeof utcDate !== "undefined") exports.utcDate = utcDate\n' +
       (natives._http_outgoing || natives.http) +
     '})'
   )(httpOutgoing.exports, httpOutgoing.require, httpOutgoing)
 
-  module.exports = require('_http_outgoing').utcDate || require('./fallback')
+  module.exports = httpOutgoing.exports.utcDate || require('./fallback')
 } catch (e) {
   module.exports = require('./fallback')
 }

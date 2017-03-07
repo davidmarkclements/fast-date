@@ -6,13 +6,13 @@ var fastDateFallback = require('../fallback')
 var tap = require('tap')
 var test = tap.test
 
-// normalize 0.10 across versions:
+// normalize across versions:
 var natives = process.binding('natives')
 if (!natives._http_outgoing) {
-  natives._http_outgoing = 'require("internal/util");' + natives.http
-} else {
-  natives._http_outgoing = 'require("internal/util");' + natives._http_outgoing
+  natives._http_outgoing = natives.http
 }
+
+natives._http_outgoing = 'require.wrapped && require("internal/util");' + natives._http_outgoing
 
 test('returns current date string', function (t) {
   t.is(fastDate(), (new Date()).toUTCString(), 'output is same as Date toUTCString')
@@ -40,28 +40,26 @@ test('fallback uses timer based caching mechanism', function (t) {
 
 test('falls back to fallback', function (t) {
   for (var k in require.cache) delete require.cache[k]
-  Object.defineProperty(require.cache, '_http_outgoing', {
-    value: {exports: {}},
-    configurable: true,
-    enumberable: true,
-    writable: false // <-- stops cache trick working
-  })
-  t.is(require('../'), require('../fallback'), 'entry point is exporting fallback')
-  Object.defineProperty(require.cache, '_http_outgoing', {
-    writable: true
-  })
+  var vm = require('vm')
+  var runInThisContext = vm.runInThisContext
+  vm.runInThisContext = function (c) {
+    if (c.substr(0, 6) === '/*fd*/') return function () {}
+    return runInThisContext(c)
+  }
+  console.log(require('../'), require('../fallback'))
+  t.is(require('../'), require('../fallback'), '  entry point is exporting fallback')
   for (var p in require.cache) delete require.cache[p]
-  fastDate = require('../')
-  fastDateFallback = require('../fallback')
+  vm.runInThisContext = runInThisContext
   t.end()
 })
 
 test('falls back to fallback even if attempt causes throw', function (t) {
   for (var k in require.cache) delete require.cache[k]
-  require.cache._http_outgoing = {
-    exports: Object.create({}, {utcDate: {
-      get: function () { throw Error('whaa?') }
-    }})}
+  var binding = process.binding
+  process.binding = function () {
+    process.binding = binding
+    throw Error('whaaa!')
+  }
   t.is(require('../'), require('../fallback'), 'entry point is exporting fallback')
   for (var p in require.cache) delete require.cache[p]
   fastDate = require('../')
