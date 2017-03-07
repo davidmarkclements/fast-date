@@ -1,9 +1,18 @@
+
+
 'use strict'
 
 var fastDate = require('../')
 var fastDateFallback = require('../fallback')
 var tap = require('tap')
 var test = tap.test
+
+// normalize 0.10 across versions:
+var natives = process.binding('natives')
+if (!natives._http_outgoing) 
+  natives._http_outgoing = 'require("internal/util");' + natives.http
+else
+  natives._http_outgoing = 'require("internal/util");' + natives._http_outgoing
 
 test('returns current date string', function (t) {
   t.is(fastDate(), (new Date()).toUTCString(), 'output is same as Date toUTCString')
@@ -124,4 +133,27 @@ test('console.warn fallback also respects TOP_NAME', function (t) {
   require('http')
   require('../').TOP_NAME = 'some-parent-module'
   for (var p in require.cache) delete require.cache[p]
+})
+
+test('uses natives.http if natives._http_outgoing is undefined', function (t) {
+  for (var k in require.cache) delete require.cache[k]
+  var http = natives.http
+  var outgoing = natives._http_outgoing
+  Object.defineProperty(natives, 'http', {
+    get: function () {
+      t.pass('falls back to native.http')
+
+      natives._http_outgoing = outgoing
+      natives.http = http
+
+      return outgoing
+    },
+    set: function () {},
+    configurable: true,
+    enumerable: true
+  })
+  natives._http_outgoing = undefined
+  require('../')
+  for (var p in require.cache) delete require.cache[p]
+  t.end()
 })

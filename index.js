@@ -29,7 +29,7 @@ try {
   vm.runInThisContext(
     '(function (exports, require, module) {' +
       'if (typeof utcDate !== "undefined") exports.utcDate = utcDate\n' +
-      natives._http_outgoing +
+      (natives._http_outgoing || natives.http) +
     '})'
   )(httpOutgoing.exports, httpOutgoing.require, httpOutgoing)
 
