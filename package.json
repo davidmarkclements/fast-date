@@ -8,7 +8,6 @@
     "cov": "tap --100 'test/*.js'",
     "cov-badge": "tap --coverage-report=lcov && codecov -t 417ad444-d6e4-4fa6-b778-27d9b5317f02",
     "bench": "node bench",
-    "prebench-http": "optional-dev-dependency -t bench-http",
     "bench-http": "node bench/http",
     "lint": "standard",
     "ci": "npm run cov && npm run cov-badge"
@@ -36,11 +35,13 @@
   },
   "optionalDevDependencies": {
     "autocannon": [
-      "^0.16.1",
+      "^2.4.0",
       "bench-http"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "autocannon": "^2.4.0"
+  },
   "directories": {
     "example": "examples",
     "test": "test"

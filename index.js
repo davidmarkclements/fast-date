@@ -1,41 +1,18 @@
 'use strict'
+// adapted from Node core:
+// https://github.com/nodejs/node/blob/3e6f1032a4fdb8ca7fba02c7d2103fba68c0ee1f/lib/_http_outgoing.js#L25-L37
 
-if (~process.moduleLoadList.indexOf('NativeModule http')) {
-  process.nextTick(function () {
-    var name = module.exports.TOP_NAME || 'fast-date'
-    var msg = 'For best performance, load ' + name + ' before requiring http(s)'
-    if (process.emitWarning) process.emitWarning(msg)
-    else console.warn('Warning: ' + msg)
-  })
-}
-
-try {
-  var natives = process.binding('natives')
-  var vm = require('vm')
-  var httpOutgoing = {
-    exports: {},
-    require: function (path) {
-      if (path === 'internal/util') {
-        var internalUtil = {}
-        vm.runInThisContext('(function (exports) {' +
-          natives['internal/util'] +
-        '})')(internalUtil)
-        return internalUtil
-      }
-      return require(path)
-    }
+var dateCache
+function utcDate () {
+  if (!dateCache) {
+    var d = new Date()
+    dateCache = d.toUTCString()
+    setTimeout(() => {
+      utcDate()
+      dateCache = undefined
+    }, 1000 - d.getMilliseconds())
   }
-
-  httpOutgoing.require.wrapped = true
-
-  vm.runInThisContext(
-    '/*fd*/(function (exports, require, module) {' +
-      'if (typeof utcDate !== "undefined") exports.utcDate = utcDate\n' +
-      (natives._http_outgoing || natives.http) +
-    '})'
-  )(httpOutgoing.exports, httpOutgoing.require, httpOutgoing)
-
-  module.exports = httpOutgoing.exports.utcDate || require('./fallback')
-} catch (e) {
-  module.exports = require('./fallback')
+  return dateCache
 }
+
+module.exports = utcDate

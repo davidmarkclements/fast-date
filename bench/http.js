@@ -1,5 +1,4 @@
 var fastDate = require('../')
-var fallback = require('../fallback')
 var http = require('http')
 var autocannon = require('autocannon')
 var WAIT = 20000
@@ -9,10 +8,6 @@ var nativeDateSrv = http.createServer(function (req, res) {
 
 var fastDateSrv = http.createServer(function (req, res) {
   res.end(fastDate())
-})
-
-var fallbackSrv = http.createServer(function (req, res) {
-  res.end(fallback())
 })
 
 var dateNowSrv = http.createServer(function (req, res) {
@@ -30,10 +25,6 @@ fastDateSrv.listen(0, function () {
   register('fastDate', fastDateSrv.address().port)
 })
 
-fallbackSrv.listen(0, function () {
-  register('fallback', fallbackSrv.address().port)
-})
-
 dateNowSrv.listen(0, function () {
   register('dateNow', dateNowSrv.address().port)
 })
@@ -47,18 +38,14 @@ function register (name, port) {
     pipelining: 1, // default
     duration: 10 // default
   }
-  if (count === 4) {
+  if (count === 3) {
     run(benches.nativeDate, function () {
       setTimeout(function () {
         run(benches.fastDate, function () {
           setTimeout(function () {
             run(benches.dateNow, function () {
-              setTimeout(function () {
-                run(benches.fallback, function () {
-                  console.log('=========== Complete ===========')
-                  process.exit(0)
-                })
-              }, WAIT)
+              console.log('=========== Complete ===========')
+              process.exit(0)
             })
           }, WAIT)
         })
