@@ -1,6 +1,6 @@
 {
   "name": "fast-date",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Fast UTC Date Timestamps",
   "main": "index.js",
   "scripts": {
