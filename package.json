@@ -39,9 +39,6 @@
       "bench-http"
     ]
   },
-  "dependencies": {
-    "autocannon": "^2.4.0"
-  },
   "directories": {
     "example": "examples",
     "test": "test"
