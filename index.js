@@ -1,18 +1,48 @@
 'use strict'
-// adapted from Node core:
-// https://github.com/nodejs/node/blob/3e6f1032a4fdb8ca7fba02c7d2103fba68c0ee1f/lib/_http_outgoing.js#L25-L37
 
-var dateCache
-function utcDate () {
-  if (!dateCache) {
-    var d = new Date()
-    dateCache = d.toUTCString()
-    setTimeout(() => {
-      utcDate()
-      dateCache = undefined
-    }, 1000 - d.getMilliseconds())
+module.exports = fastDate
+
+function fastDate (opts) {
+  opts = opts || {}
+  var format = opts.format
+  var suffix = opts.suffix || ''
+  var prefix = opts.prefix || ''
+
+  // eslint-disable-next-line
+  const utcDate = Function(`
+    var cache = ''
+    return function utcDate () {
+      if (!cache) {
+        var d = new Date()
+        cache = '${prefix}' + d.toUTCString() + '${suffix}'
+        setTimeout(() => {
+          cache = undefined
+        }, 1000 - d.getMilliseconds())
+      }
+      return cache
+    }
+  `)()
+
+  // eslint-disable-next-line
+  const unixDate = Function(`
+    var cache = ''
+    return function unixDate () {
+      if (!cache) {
+        var d = Date.now()
+        ${prefix || suffix ? `
+          cache = '${prefix}' + Math.round(d / 1000.0) + '${suffix}'
+        ` : `cache = Math.round(d / 1000.0)`}
+        setTimeout(() => {
+          cache = undefined
+        }, 1000 - (d % 1000))
+      }
+      return cache
+    }  
+  `)()
+
+  switch (format) {
+    default: return utcDate
+    case 'utc': return utcDate
+    case 'unix': return unixDate
   }
-  return dateCache
 }
-
-module.exports = utcDate

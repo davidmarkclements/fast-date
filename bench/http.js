@@ -1,4 +1,5 @@
-var fastDate = require('../')
+var fastDateUtc = require('../')({format: 'utc'})
+var fastDateUnix = require('../')({format: 'unix'})
 var http = require('http')
 var autocannon = require('autocannon')
 var WAIT = 20000
@@ -6,8 +7,12 @@ var nativeDateSrv = http.createServer(function (req, res) {
   res.end((new Date()).toUTCString())
 })
 
-var fastDateSrv = http.createServer(function (req, res) {
-  res.end(fastDate())
+var fastDateUtcSrv = http.createServer(function (req, res) {
+  res.end(fastDateUtc())
+})
+
+var fastDateUnixSrv = http.createServer(function (req, res) {
+  res.end(fastDateUnix().toString())
 })
 
 var dateNowSrv = http.createServer(function (req, res) {
@@ -21,8 +26,12 @@ nativeDateSrv.listen(0, function () {
   register('nativeDate', nativeDateSrv.address().port)
 })
 
-fastDateSrv.listen(0, function () {
-  register('fastDate', fastDateSrv.address().port)
+fastDateUnixSrv.listen(0, function () {
+  register('fastDateUnix', fastDateUtcSrv.address().port)
+})
+
+fastDateUtcSrv.listen(0, function () {
+  register('fastDateUtc', fastDateUnixSrv.address().port)
 })
 
 dateNowSrv.listen(0, function () {
@@ -38,14 +47,18 @@ function register (name, port) {
     pipelining: 1, // default
     duration: 10 // default
   }
-  if (count === 3) {
+  if (count === 4) {
     run(benches.nativeDate, function () {
       setTimeout(function () {
-        run(benches.fastDate, function () {
+        run(benches.fastDateUnix, function () {
           setTimeout(function () {
-            run(benches.dateNow, function () {
-              console.log('=========== Complete ===========')
-              process.exit(0)
+            run(benches.fastDateUtc, function () {
+              setTimeout(function () {
+                run(benches.dateNow, function () {
+                  console.log('=========== Complete ===========')
+                  process.exit(0)
+                })
+              }, WAIT)
             })
           }, WAIT)
         })
