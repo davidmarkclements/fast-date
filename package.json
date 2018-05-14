@@ -26,6 +26,7 @@
   "author": "David Mark Clements <huperekchuno@googlemail.com>",
   "license": "MIT",
   "devDependencies": {
+    "autocannon": "^2.4.0",
     "codecov": "^1.0.1",
     "fastbench": "^1.0.1",
     "optional-dev-dependency": "^2.0.0",
@@ -38,9 +39,6 @@
       "^2.4.0",
       "bench-http"
     ]
-  },
-  "dependencies": {
-    "autocannon": "^2.4.0"
   },
   "directories": {
     "example": "examples",
