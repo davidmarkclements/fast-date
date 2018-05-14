@@ -8,8 +8,6 @@ High Speed UTC Timestamps
 
 ## Supports
 
-- [x] Node 0.10
-- [x] Node 0.12
 - [x] Node 4
 - [x] Node 6
 - [x] Node 8
