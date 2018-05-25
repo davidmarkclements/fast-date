@@ -10,14 +10,15 @@ function fastDate (opts) {
 
   // eslint-disable-next-line
   const utcDate = Function(`
-    var cache = ''
+    var cache = undefined
+    var clear = () => {
+      cache = undefined
+    }
     return function utcDate () {
       if (!cache) {
         var d = new Date()
         cache = '${prefix}' + d.toUTCString() + '${suffix}'
-        setTimeout(() => {
-          cache = undefined
-        }, 1000 - d.getMilliseconds())
+        setTimeout(clear, 1000 - d.getMilliseconds())
       }
       return cache
     }
@@ -25,16 +26,17 @@ function fastDate (opts) {
 
   // eslint-disable-next-line
   const unixDate = Function(`
-    var cache = ''
+    var cache = undefined
+    var clear = () => {
+      cache = undefined
+    }
     return function unixDate () {
       if (!cache) {
         var d = Date.now()
         ${prefix || suffix ? `
           cache = '${prefix}' + Math.round(d / 1000.0) + '${suffix}'
         ` : `cache = Math.round(d / 1000.0)`}
-        setTimeout(() => {
-          cache = undefined
-        }, 1000 - (d % 1000))
+        setTimeout(clear, 1000 - (d % 1000))
       }
       return cache
     }  
